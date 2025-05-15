@@ -1,9 +1,9 @@
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import GoogleStrategy from "passport-google-oauth20";
-import bcrypt from "bcrypt";
 import dotenv from "dotenv";
 import { findUserByUsername } from "../models/authModel.js";
+import { loginWithGoogle, loginWithUsernmaneAndPassword } from "../controllers/authController.js";
 
 dotenv.config();
 
@@ -28,24 +28,17 @@ const configurePassport = (passport) => {
         usernameField: "username",
         passwordField: "password",
       },
-      async (username, password, done) => {
-        try {
-          const user = await findUserByUsername(username.trim().toLowerCase());
-          if (!user) {
-            return done(null, false, { message: "User not found" });
-          }
-
-          const valid = await bcrypt.compare(password, user.password);
-          if (!valid) {
-            return done(null, false, { message: "Password is not correct" });
-          }
-
-          return done(null, user);
-        } catch (err) {
-          done(err);
-        }
-      }
+      loginWithUsernmaneAndPassword
     )
+  );
+
+  passport.use(
+    "google",
+    new GoogleStrategy({
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: "http://localhost:3000/auth/google/callback",
+    }, loginWithGoogle)
   );
 };
 

@@ -22,6 +22,16 @@ router.post(
     failureRedirect: "/login",
   })
 );
+router.post("/auth/google", passport.authenticate("google",{
+  scope:["profile", "email"]
+}))
+router.get("/auth/google/callback",
+  passport.authenticate("google", {
+    successRedirect: "/posts",
+    failureRedirect: "/login"
+  })
+);
+
 
 //logout routes
 router.post("/logout", logoutFunction);

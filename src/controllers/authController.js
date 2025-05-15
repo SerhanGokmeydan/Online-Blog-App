@@ -1,4 +1,8 @@
-import { registerUser } from "../models/authModel.js";
+import {
+  registerUser,
+  findUserByUsername,
+  googleLogin,
+} from "../models/authModel.js";
 import bcrypt from "bcrypt";
 import dotenv from "dotenv";
 
@@ -13,7 +17,7 @@ export const getRegisterScreen = (req, res) => {
 
 export const registerWithUsernameAndPassword = async (req, res) => {
   try {
-    const username = req.body.username.trim().toLowerCase();;
+    const username = req.body.username.trim().toLowerCase();
     const password = req.body.password.trim();
     const date = new Date().toDateString();
 
@@ -39,12 +43,55 @@ export const getLoginPage = (req, res) => {
   res.render("login.ejs");
 };
 
+export const loginWithUsernmaneAndPassword = async (
+  username,
+  password,
+  done
+) => {
+  try {
+    const user = await findUserByUsername(username.trim().toLowerCase());
+    if (!user) {
+      return done(null, false, { message: "User not found" });
+    }
+
+    const valid = await bcrypt.compare(password, user.password);
+    if (!valid) {
+      return done(null, false, { message: "Password is not correct" });
+    }
+
+    return done(null, user);
+  } catch (err) {
+    done(err);
+  }
+};
+
+export const loginWithGoogle = async (
+  accssesToken,
+  refreshToken,
+  profil,
+  done
+) => {
+  try {
+    const username = profil.displayName.trim().toLowerCase();
+
+    const user = await findUserByUsername(username);
+    if (!user) {
+      const newUser = await googleLogin(username);
+      return done(null, newUser);
+    }
+
+    return done(null, false);
+  } catch (err) {
+    done(err);
+  }
+};
+
 //logout processes
 export const logoutFunction = (req, res) => {
   req.logout((err) => {
-    if(err){
-      next(err)
+    if (err) {
+      next(err);
     }
-    res.redirect("/")
-  })
-}
+    res.redirect("/");
+  });
+};
