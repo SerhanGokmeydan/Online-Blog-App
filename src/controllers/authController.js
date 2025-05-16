@@ -76,11 +76,12 @@ export const loginWithGoogle = async (
 
     const user = await findUserByUsername(username);
     if (!user) {
-      const newUser = await googleLogin(username);
+      const date = new Date().toDateString();
+      const newUser = await googleLogin(username, date);
       return done(null, newUser);
     }
 
-    return done(null, false);
+    return done(null, user);
   } catch (err) {
     done(err);
   }

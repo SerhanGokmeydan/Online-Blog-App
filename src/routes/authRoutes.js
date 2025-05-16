@@ -22,9 +22,11 @@ router.post(
     failureRedirect: "/login",
   })
 );
-router.post("/auth/google", passport.authenticate("google",{
-  scope:["profile", "email"]
+
+router.get("/auth/google", passport.authenticate("google",{
+  scope:["profile"]
 }))
+
 router.get("/auth/google/callback",
   passport.authenticate("google", {
     successRedirect: "/posts",
@@ -34,6 +36,6 @@ router.get("/auth/google/callback",
 
 
 //logout routes
-router.post("/logout", logoutFunction);
+router.get("/logout", logoutFunction);
 
 export default router;
