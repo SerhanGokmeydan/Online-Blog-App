@@ -1,7 +1,8 @@
-<%- include('partials/header.ejs') %>
-<% for(let post of posts) { %>
-  <p><%= post.title %></p>
+<%- include('partials/header.ejs') %> <% for(let post of posts) { %>
+<a href="/post/<%= post.id %>"><%= post.title %></a>
+<br>
 <% } %>
+<br>
 <a href="/register">register</a>
 <a href="/login">login</a>
 <form action="/logout" method="get">
@@ -10,4 +11,5 @@
 <form action="/create" method="get">
   <button>create post</button>
 </form>
+
 <%- include('partials/footer.ejs') %>
