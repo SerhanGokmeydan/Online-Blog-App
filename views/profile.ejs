@@ -1,0 +1,20 @@
+<%- include('partials/header.ejs') %>
+
+<img src="https://imageplaceholder.net/300" alt="profile photo" />
+<p><%= user.username %></p>
+<div>
+  <% for(let post of user.posts) { %>
+  <div>
+    <a href="/post/<%= post.id %>"><%= post.title %></a> <br />
+    <% if (userId == user.id) { %>
+    <a href="/edit/<%= post.id %>">edit</a>
+    <% } %>
+  </div>
+  <% } %>
+</div>
+
+<% if (userId == user.id) { %>
+<a href="/create">create</a>
+<% } %> 
+
+<%- include('partials/footer.ejs') %>

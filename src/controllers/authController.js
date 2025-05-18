@@ -19,7 +19,7 @@ export const registerWithUsernameAndPassword = async (req, res) => {
   try {
     const username = req.body.username.trim().toLowerCase();
     const password = req.body.password.trim();
-    const date = new Date().toDateString();
+    const date = new Date().toISOString();
 
     const hashedPassword = await bcrypt.hash(password, saltRaunds);
     await registerUser(username, hashedPassword, date);
@@ -38,11 +38,12 @@ export const registerWithUsernameAndPassword = async (req, res) => {
   }
 };
 
-//login processes
+//get login page
 export const getLoginPage = (req, res) => {
   res.render("login.ejs");
 };
 
+//login with username and password
 export const loginWithUsernmaneAndPassword = async (
   username,
   password,
@@ -65,6 +66,7 @@ export const loginWithUsernmaneAndPassword = async (
   }
 };
 
+//login with google
 export const loginWithGoogle = async (
   accssesToken,
   refreshToken,
@@ -76,7 +78,7 @@ export const loginWithGoogle = async (
 
     const user = await findUserByUsername(username);
     if (!user) {
-      const date = new Date().toDateString();
+      const date = new Date().toISOString;
       const newUser = await googleLogin(username, date);
       return done(null, newUser);
     }

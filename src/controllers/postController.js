@@ -11,8 +11,12 @@ export const redirectPostsPage = (req, res) => {
 
 // get all posts
 export const allPostsPage = async (req, res) => {
-  const posts = await fetchAllPosts();
-  res.render("allPosts.ejs", { posts: posts });
+  try{
+    const posts = await fetchAllPosts();
+    res.render("allPosts.ejs", { allPosts: posts });
+  } catch (err){
+    console.log(err)
+  }
 };
 
 //get a post
@@ -35,21 +39,21 @@ export const createPost = async (req, res) => {
       title: req.body.title,
       content: req.body.content,
       author: req.user.username,
-      date: new Date().toDateString(),
+      date: new Date().toISOString(),
       like: 0,
     };
 
     if (newPost.title && newPost.content) {
       await pushPostToDb(newPost);
     }
-    res.redirect("/posts");
+    res.redirect("/profile/" + req.user.id);
   } catch (err) {
     console.log("postController", err);
   }
 };
 
 //edit post page
-export const editPostPage = async (req, res) => {
+export const editPostPage = (req, res) => {
   res.render("editPost.ejs", {
     post: req.post,
   });
@@ -57,12 +61,16 @@ export const editPostPage = async (req, res) => {
 
 //edit post
 export const editPost = async (req, res) => {
-  const updatedPost = {
-    id: req.params.id,
-    title: req.body.title,
-    content: req.body.content,
-  };
-
-  await editPostFromDb(updatedPost);
-  res.redirect("/post/" + updatedPost.id);
+  try{
+    const updatedPost = {
+      id: req.params.id,
+      title: req.body.title,
+      content: req.body.content,
+    };
+  
+    await editPostFromDb(updatedPost);
+    res.redirect("/profile/" + req.user.id);
+  } catch(err){
+    console.log(err)
+  }
 };

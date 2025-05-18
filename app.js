@@ -8,15 +8,17 @@ import express from "express";
 import bodyParser from "body-parser";
 import authRoutes from "./src/routes/authRoutes.js";
 import postRoutes from "./src/routes/postRoutes.js";
+import userRoutes from "./src/routes/userRoutes.js";
 import session from "express-session";
 import dotenv from "dotenv";
 import passport from "passport";
 import configurePassport from "./src/config/passport.js";
+import { ensureAuthenticated } from "./src/middlewares/authMiddleware.js";
 
 dotenv.config();
 const app = express();
 
-configurePassport(passport); // <-- önce çağırın
+configurePassport(passport); // sadece bir kez çağrılır
 
 app.use(
   session({
@@ -29,15 +31,21 @@ app.use(
   })
 );
 
-configurePassport(passport);
 app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 
+//to use user id in header.ejs
+app.use((req, res, next) => {
+  res.locals.userId = req.user ? req.user.id : null;
+  next();
+});
+
 app.use("/", authRoutes);
-app.use("/", postRoutes);
+app.use("/", ensureAuthenticated, postRoutes);
+app.use("/", ensureAuthenticated, userRoutes);
 
 app.listen(3000, () => {
   console.log("app is running on port 3000");

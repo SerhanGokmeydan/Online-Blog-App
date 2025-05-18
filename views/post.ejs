@@ -1,6 +1,7 @@
 <%- include('partials/header.ejs') %>
 <p><%= post.title %></p>
 <p><%= post.content %></p>
-<br>
-<a href="/edit/<%= post.id %>">edit</a>
+<p>
+  <a href="/profile/<%= post.user_id %>">user profile</a>
+</p>
 <%- include('partials/footer.ejs') %>
