@@ -23,6 +23,16 @@ export const findUserByUsername = async (username) => {
   }
 };
 
+export const findUserByUserId = async (userId) => {
+  try {
+    const result = await db.query("select * from users where id = $1", [userId]);
+    const user = result.rows[0];
+    return user;
+  } catch (err) {
+    console.log("authModel:" + err);
+  }
+};
+
 export const googleLogin = async (username, date) => {
   try{
     const result = await db.query("insert into users (username, password, date) values ($1, $2, $3) returning *", [username, "google", date]);

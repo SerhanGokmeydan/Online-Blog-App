@@ -35,9 +35,10 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(express.static("public"));
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json())
 
-//to use user id in header.ejs
+//to use user id in all files
 app.use((req, res, next) => {
   res.locals.userId = req.user ? req.user.id : null;
   next();

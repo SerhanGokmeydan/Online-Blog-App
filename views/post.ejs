@@ -1,7 +1,11 @@
 <%- include('partials/header.ejs') %>
 <p><%= post.title %></p>
 <p><%= post.content %></p>
+<form action="">
+  <button id="favorite-btn">favorite</button>
+</form>
 <p>
   <a href="/profile/<%= post.user_id %>">user profile</a>
 </p>
+<script src="/scripts/favorite.js"></script>
 <%- include('partials/footer.ejs') %>

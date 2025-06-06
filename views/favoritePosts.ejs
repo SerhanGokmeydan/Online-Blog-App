@@ -1,0 +1,10 @@
+<%- include('partials/header.ejs') %>
+<div>
+  <% if (locals.favoritePosts) { %>
+    <% for( let post of favoritePosts) { %>
+      <a href="/post/<%= post.id %>"><%= post.title %></a>
+      <br>
+    <% } %>
+  <% } %>
+</div>
+<%- include('partials/footer.ejs') %>

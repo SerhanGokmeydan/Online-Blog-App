@@ -1,16 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-</head>
-<body>
-  <header>
-    <nav>
-      <p>logo</p>
-      <a href="/">anasayfa</a>
-      <a href="/profile/<%= userId %>">profile</a>
-      <a href="/logout">logout</a>
-    </nav>
-  </header>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- <link rel="stylesheet" href="styles/main.css"> -->
+    <!-- <link rel="stylesheet" href="styles/nav.css"> -->
+    <link rel="stylesheet" href="styles/search.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <header>
+      <nav>
+        <p>logo</p>
+        <a href="/">anasayfa</a>
+        <a href="/profile/<%= userId %>">profile</a>
+        <a href="/search">search</a>
+        <a href="/favorite-posts">favorites</a>
+        <a href="/logout">logout</a>
+      </nav>
+    </header>
+    <main></main>
+  </body>
+</html>

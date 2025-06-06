@@ -24,8 +24,9 @@ export const registerWithUsernameAndPassword = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, saltRaunds);
     await registerUser(username, hashedPassword, date);
 
-    // Kullanıcıyı otomatik olarak login yap
-    req.login({ username: username }, (err) => {
+    // Kullanıcıyı tekrar bul ve id ile birlikte req.login'e ver
+    const user = await findUserByUsername(username);
+    req.login(user, (err) => {
       if (err) {
         console.log("authController:" + err);
         return res.redirect("/login");
@@ -78,7 +79,7 @@ export const loginWithGoogle = async (
 
     const user = await findUserByUsername(username);
     if (!user) {
-      const date = new Date().toISOString;
+      const date = new Date().toISOString();
       const newUser = await googleLogin(username, date);
       return done(null, newUser);
     }

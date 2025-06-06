@@ -1,20 +1,40 @@
-<%- include('partials/header.ejs') %>
-
-<img src="https://imageplaceholder.net/300" alt="profile photo" />
+<%- include('partials/header.ejs') %> <% if (locals.user.profile_img) { %>
+<img
+  src="<%= user.profile_img %>"
+  alt="profile photo"
+  width="150"
+  height="150"
+/>
+<% } else {%>
+<img src="/assets/user.png" alt="profile photo" width="150" height="150" />
+<% } %>
 <p><%= user.username %></p>
+<p><%= user.date %></p>
+<% if (userId == user.id) { %>
+<a href="/edit-profile">Edit Profile</a>
+<p>
+  <a href="/followers">followers</a>
+  <a href="/followings">followings</a>
+</p>
+<% } %> <% if (userId !== user.id) { %>
+<form action="">
+  <button id="follow-btn">follow</button>
+</form>
+<% } %>
 <div>
   <% for(let post of user.posts) { %>
   <div>
     <a href="/post/<%= post.id %>"><%= post.title %></a> <br />
     <% if (userId == user.id) { %>
-    <a href="/edit/<%= post.id %>">edit</a>
+    <a href="/edit-post/<%= post.id %>">edit</a>
     <% } %>
   </div>
+  <hr />
   <% } %>
 </div>
 
 <% if (userId == user.id) { %>
 <a href="/create">create</a>
-<% } %> 
-
+<% } %>
+<script src="/scripts/follow.js"></script>
 <%- include('partials/footer.ejs') %>

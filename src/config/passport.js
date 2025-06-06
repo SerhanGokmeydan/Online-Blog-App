@@ -2,19 +2,19 @@ import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import GoogleStrategy from "passport-google-oauth20";
 import dotenv from "dotenv";
-import { findUserByUsername } from "../models/authModel.js";
+import { findUserByUserId } from "../models/authModel.js";
 import { loginWithGoogle, loginWithUsernmaneAndPassword } from "../controllers/authController.js";
 
 dotenv.config();
 
 const configurePassport = (passport) => {
   passport.serializeUser((user, done) => {
-    done(null, user.username);
+    done(null, user.id); // id ile serialize
   });
 
-  passport.deserializeUser(async (username, done) => {
+  passport.deserializeUser(async (id, done) => {
     try {
-      const user = await findUserByUsername(username);
+      const user = await findUserByUserId(id); // id ile bul
       done(null, user);
     } catch (err) {
       done(err);

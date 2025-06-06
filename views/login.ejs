@@ -3,24 +3,37 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <!-- <link rel="stylesheet" href="styles/login-register.css" /> -->
+    <title>Login</title>
   </head>
   <body>
-    <form action="/login" method="post">
-      <label for="username">enter your username</label>
-      <input type="text" name="username" id="login-username" />
-      <br />
-      <label for="password">enter your password</label>
-      <input type="password" name="password" id="login-password" />
-      <hr />
-      <p>
-        If you don't have an account, you can
-        <a href="/register">register</a> here
-      </p>
-      <button>login</button>
-    </form>
-    <form action="/auth/google" method="get">
-      <button>google</button>
-    </form>
+    <div class="form-container">
+      <form action="/login" method="post" id="login-form">
+        <input
+          type="text"
+          name="username"
+          id="login-username"
+          class="login-input"
+          placeholder="Username"
+          required
+        />
+        <input
+          type="password"
+          name="password"
+          id="login-password"
+          class="login-input"
+          placeholder="Password"
+          required
+        />
+        <p id="register-link">
+          No account?
+          <a href="/register">Register</a>
+        </p>
+        <div class="login-btn-group">
+          <button id="login-btn" type="submit">Login</button>
+          <a id="google-btn" href="/auth/google">Google</a>
+        </div>
+      </form>
+    </div>
   </body>
 </html>

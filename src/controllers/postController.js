@@ -2,6 +2,13 @@ import {
   editPostFromDb,
   fetchAllPosts,
   pushPostToDb,
+  deletePostFromDb,
+  searchPostFromDb,
+  addFavoritePostToDb,
+  fetchPostById,
+  getFavoritePostsByUser,
+  searchPostInFavorites,
+  removePostFromFavorites
 } from "../models/postModel.js";
 
 //redirect posts
@@ -72,5 +79,65 @@ export const editPost = async (req, res) => {
     res.redirect("/profile/" + req.user.id);
   } catch(err){
     console.log(err)
+  }
+};
+
+//delete post
+export const deletePost = async (req, res) => {
+  try{
+    const id = req.params.id
+    await deletePostFromDb(id);
+    res.redirect("/profile/" + req.user.id)
+  }catch(err){
+    console.log("post controller", err)
+  }
+}
+
+//search post page
+export const searchPage = (req, res) => {
+  res.render("search.ejs")
+}
+
+//search post
+export const searchPost = async (req, res) => {
+  try{
+    const { title } = req.body;
+    const posts = await searchPostFromDb(title);
+    res.status(200).json({ posts });
+  }catch(err){
+    console.log(err);
+  }
+}
+
+//add a post to favorites
+export const addPostToFavorite = async (req, res) => {
+  try{
+    const {postId} = req.body;
+    const userId = req.user.id;
+    const isFavorite = await searchPostInFavorites(userId, postId)
+    
+    if(isFavorite){
+      await removePostFromFavorites(userId, postId)
+      res.status(200).json({info: "post was removed"})
+    }else{
+      await addFavoritePostToDb(userId, postId)
+      res.status(200).json({info: "post was added"})
+    }
+
+  }catch(err){
+    console.log("post controller", err)
+  }
+}
+
+//favorites page
+export const favoritePostsPage = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const favoritePosts = await getFavoritePostsByUser(userId);
+
+    res.render("favoritePosts.ejs", { favoritePosts });
+
+  } catch (err) {
+    console.log("post controller", err);
   }
 };

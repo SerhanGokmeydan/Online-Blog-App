@@ -1,6 +1,10 @@
-<%- include('partials/header.ejs') %> <% for(let post of allPosts) { %>
-<a href="/post/<%= post.id %>"><%= post.title %></a>
-<br>
-<% } %>
+<%- include('partials/header.ejs') %>
+
+<div id="all-posts">
+  <% for(let post of allPosts) { %>
+  <a href="/post/<%= post.id %>"><%= post.title %></a>
+  <br>
+  <% } %>
+</div>
 <br>
 <%- include('partials/footer.ejs') %>

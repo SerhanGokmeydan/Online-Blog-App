@@ -1,0 +1,10 @@
+<%- include('partials/header.ejs') %>
+<div>
+  <% if (locals.followers) { %> 
+    <% for( let profile of followers) { %> 
+      <a href="/profile/<%= profile.id %>"><%= profile.username %></a>
+      <br />
+    <% } %> 
+  <% } %>
+</div>
+<%- include('partials/footer.ejs') %>

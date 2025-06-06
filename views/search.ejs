@@ -1,0 +1,12 @@
+<%- include('partials/header.ejs') %>
+<form action="">
+  <input type="search" name="search" id="searchbox">
+</form>
+<div>
+  <a href="#" id="display-posts">posts</a>
+  <a href="#" id="display-users">users</a>
+</div>
+<div id="searched-posts" class="show"></div>
+<div id="searched-users" class="hide"></div>
+<script src="/scripts/search.js"></script>
+<%- include('partials/footer.ejs') %>

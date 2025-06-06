@@ -1,0 +1,16 @@
+<%- include('partials/header.ejs') %> 
+<% if (locals.profilePic) { %>
+<img src="<%= profilePic %>" alt="profile photo" width="150" height="150"/>
+<% } else {%>
+<img src="/assets/user.png" alt="profile photo" width="150" height="150"/>
+<% } %>
+<form action="/upload-profile-pic" method="post" enctype="multipart/form-data">
+  <input type="file" name="profilePic" accept="image/*" required />
+  <button>Upload</button>
+</form>
+<form action="/edit-profile" method="post">
+  <input type="text" name="username" id="" value="<%= username %>" required />
+  <button>Edit Profile</button>
+</form>
+
+<%- include('partials/footer.ejs') %>
