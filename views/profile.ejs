@@ -1,17 +1,23 @@
-<%- include('partials/header.ejs') %> <% if (locals.user.profile_img) { %>
-<img
-  src="<%= user.profile_img %>"
-  alt="profile photo"
-  width="150"
-  height="150"
-/>
-<% } else {%>
-<img src="/assets/user.png" alt="profile photo" width="150" height="150" />
-<% } %>
-<p><%= user.username %></p>
-<p><%= user.date %></p>
+<%- include('partials/header.ejs') %> 
+  <div id="profile-header">
+    <% if (locals.user.profile_img) { %>
+    <img
+      src="<%= user.profile_img %>"
+      alt="profile photo"
+      width="150"
+      height="150"
+    />
+    <% } else {%>
+    <img src="/assets/user.png" alt="profile photo" width="150" height="150" />
+    <% } %>
+    <div id="username-date">
+      <h1><%= user.username %></h1>
+      <h3><%= String(user.date).slice(0,15) %></h3>
+    </div>
+  </div>
 <% if (userId == user.id) { %>
 <a href="/edit-profile">Edit Profile</a>
+<p>posts</p>
 <p>
   <a href="/followers">followers</a>
   <a href="/followings">followings</a>
@@ -23,13 +29,17 @@
 <% } %>
 <div>
   <% for(let post of user.posts) { %>
-  <div>
-    <a href="/post/<%= post.id %>"><%= post.title %></a> <br />
-    <% if (userId == user.id) { %>
-    <a href="/edit-post/<%= post.id %>">edit</a>
-    <% } %>
-  </div>
-  <hr />
+    <div class="post">
+    <a href="/post/<%= post.id %>">
+        <h2>
+          <%= post.title %>
+        </h2>
+        <p class="content"><%= post.content %></p>
+      </a>
+      <% if (userId == user.id) { %>
+      <a href="/edit-post/<%= post.id %>">edit</a>
+      <% } %>
+    </div>
   <% } %>
 </div>
 

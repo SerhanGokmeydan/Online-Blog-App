@@ -1,10 +1,19 @@
 <%- include('partials/header.ejs') %>
 
 <div id="all-posts">
-  <% for(let post of allPosts) { %>
-  <a href="/post/<%= post.id %>"><%= post.title %></a>
-  <br>
+  <% for(let [index, post] of allPosts.entries()) { %>
+    <div class="post">
+        <a href="/post/<%= post.id %>">
+        <div class="profile-info">
+          <img src="<%= userInfo[index].profile_img %>" alt="profile picture" id="profile-pic">
+          <p><%= userInfo[index].username %></p>
+        </div>
+        <h2>
+          <%= post.title %>
+        </h2>
+        <p class="content"><%= post.content %></p>
+      </a>
+      </div>
   <% } %>
 </div>
-<br>
 <%- include('partials/footer.ejs') %>

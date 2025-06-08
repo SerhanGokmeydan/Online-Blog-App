@@ -8,8 +8,9 @@ import {
   fetchPostById,
   getFavoritePostsByUser,
   searchPostInFavorites,
-  removePostFromFavorites
+  removePostFromFavorites,
 } from "../models/postModel.js";
+import { fetchUserInfoById } from "../models/userModel.js";
 
 //redirect posts
 export const redirectPostsPage = (req, res) => {
@@ -18,19 +19,43 @@ export const redirectPostsPage = (req, res) => {
 
 // get all posts
 export const allPostsPage = async (req, res) => {
-  try{
+  try {
     const posts = await fetchAllPosts();
-    res.render("allPosts.ejs", { allPosts: posts });
-  } catch (err){
-    console.log(err)
+    const userInfo = await Promise.all(
+      posts.map(async (post) => {
+        return await fetchUserInfoById(post.user_id);
+      })
+    );
+
+    res.render("allPosts.ejs", { allPosts: posts, userInfo: userInfo });
+  } catch (err) {
+    console.log(err);
   }
 };
 
 //get a post
-export const postPage = (req, res) => {
-  res.render("post.ejs", {
-    post: req.post,
-  });
+export const postPage = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const post = req.post;
+    const userInfo = await fetchUserInfoById(post.user_id);
+    const isFavorite = await searchPostInFavorites(userId, post.id);
+    let valid;
+
+    if (isFavorite) {
+      valid = true;
+    } else {
+      valid = false;
+    }
+
+    res.render("post.ejs", {
+      post: post,
+      userInfo: userInfo,
+      isFavorite: valid,
+    });
+  } catch (err) {
+    console.log("post controller", err);
+  }
 };
 
 //create post page
@@ -68,75 +93,77 @@ export const editPostPage = (req, res) => {
 
 //edit post
 export const editPost = async (req, res) => {
-  try{
+  try {
     const updatedPost = {
       id: req.params.id,
       title: req.body.title,
       content: req.body.content,
     };
-  
+
     await editPostFromDb(updatedPost);
     res.redirect("/profile/" + req.user.id);
-  } catch(err){
-    console.log(err)
+  } catch (err) {
+    console.log(err);
   }
 };
 
 //delete post
 export const deletePost = async (req, res) => {
-  try{
-    const id = req.params.id
+  try {
+    const id = req.params.id;
     await deletePostFromDb(id);
-    res.redirect("/profile/" + req.user.id)
-  }catch(err){
-    console.log("post controller", err)
+    res.redirect("/profile/" + req.user.id);
+  } catch (err) {
+    console.log("post controller", err);
   }
-}
+};
 
 //search post page
 export const searchPage = (req, res) => {
-  res.render("search.ejs")
-}
+  res.render("search.ejs");
+};
 
 //search post
 export const searchPost = async (req, res) => {
-  try{
+  try {
     const { title } = req.body;
     const posts = await searchPostFromDb(title);
     res.status(200).json({ posts });
-  }catch(err){
+  } catch (err) {
     console.log(err);
   }
-}
+};
 
 //add a post to favorites
 export const addPostToFavorite = async (req, res) => {
-  try{
-    const {postId} = req.body;
+  try {
+    const postId = req.params.id
     const userId = req.user.id;
-    const isFavorite = await searchPostInFavorites(userId, postId)
-    
-    if(isFavorite){
-      await removePostFromFavorites(userId, postId)
-      res.status(200).json({info: "post was removed"})
-    }else{
-      await addFavoritePostToDb(userId, postId)
-      res.status(200).json({info: "post was added"})
+    const isFavorite = await searchPostInFavorites(userId, postId);
+
+    if (isFavorite) {
+      await removePostFromFavorites(userId, postId);
+    } else {
+      await addFavoritePostToDb(userId, postId);
     }
 
-  }catch(err){
-    console.log("post controller", err)
+    res.redirect("/post/" + postId)
+  } catch (err) {
+    console.log("post controller", err);
   }
-}
+};
 
 //favorites page
 export const favoritePostsPage = async (req, res) => {
   try {
     const userId = req.user.id;
     const favoritePosts = await getFavoritePostsByUser(userId);
-
-    res.render("favoritePosts.ejs", { favoritePosts });
-
+    const userInfo = await Promise.all(
+      favoritePosts.map(async (post) => {
+        return await fetchUserInfoById(post.user_id);
+      })
+    ); 
+    res.render("favoritePosts.ejs", { favoritePosts, userInfo });
   } catch (err) {
     console.log("post controller", err);
   }

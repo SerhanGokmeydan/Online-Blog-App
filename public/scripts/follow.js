@@ -1,4 +1,3 @@
-const followBtn = document.querySelector("#follow-btn");
 const baseUrl = "http://localhost:3000";
 
 const follow = async (e) => {
@@ -22,5 +21,7 @@ const follow = async (e) => {
   console.log(data)
 };
 
-// Doğru event listener
-followBtn.addEventListener("click", follow);
+const followButton = document.querySelector("#follow-btn");
+if (followButton) {
+  followButton.addEventListener("click", follow);
+}

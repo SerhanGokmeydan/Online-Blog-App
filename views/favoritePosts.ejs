@@ -1,10 +1,22 @@
 <%- include('partials/header.ejs') %>
-<div>
+
+<div id="all-posts">
   <% if (locals.favoritePosts) { %>
-    <% for( let post of favoritePosts) { %>
-      <a href="/post/<%= post.id %>"><%= post.title %></a>
-      <br>
+    <% for(let [index, post] of favoritePosts.entries()) { %>
+      <a href="/post/<%= post.id %>">
+        <div class="post">
+          <div class="profile-info">
+            <img src="<%= userInfo[index].profile_img %>" alt="profile picture" id="profile-pic">
+            <p><%= userInfo[index].username %></p>
+          </div>
+          <h2>
+            <%= post.title %>
+          </h2>
+          <p class="content"><%= post.content %></p>
+        </div>
+      </a>
     <% } %>
   <% } %>
 </div>
+
 <%- include('partials/footer.ejs') %>

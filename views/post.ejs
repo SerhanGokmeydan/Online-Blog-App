@@ -1,11 +1,27 @@
 <%- include('partials/header.ejs') %>
-<p><%= post.title %></p>
-<p><%= post.content %></p>
-<form action="">
-  <button id="favorite-btn">favorite</button>
-</form>
-<p>
-  <a href="/profile/<%= post.user_id %>">user profile</a>
-</p>
-<script src="/scripts/favorite.js"></script>
+<div id="post-container">
+  <div id="post">
+    <div id="title">
+      <h1><%= post.title %></h1>
+      <form action="/favorite/<%= post.id %>" method="post">
+        <button id="favorite-btn">
+          <% if (isFavorite) { %>
+            <i class="fa-solid fa-star"></i>
+          <% } else{%>
+            <i class="fa-regular fa-star"></i>
+          <% } %>
+        </button>
+      </form>
+    </div>
+    <p class="content"><%= post.content %></p>
+  </div>
+  <div id="user-info">
+
+  </div>
+  <a href="/profile/<%= post.user_id %>" id="profile-link">
+    <img src="<%= userInfo.profile_img %>" alt="profile pic" />
+    <p><%= userInfo.username %> / <%= String(post.date).slice(0, 15) %></p>
+  </a>
+</div>
+<!-- <script src="/scripts/favorite.js"></script> -->
 <%- include('partials/footer.ejs') %>

@@ -130,7 +130,7 @@ export const searchUserInFollowers = async (userId, profileId) => {
 };
 
 // unfollow a profile
-export const unfollowUserFromFollowers = async (userId, postId) => {
+export const unfollowUserFromFollowers = async (userId, profileId) => {
   try {
     await db.query(
       "delete from user_followers where user_id = $1 and follower_id = $2",

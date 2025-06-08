@@ -43,7 +43,7 @@ router.get("/search", searchPage)
 router.post("/search-post", searchPost)
 
 //add a post to favorites
-router.post("/favorite", addPostToFavorite)
+router.post("/favorite/:id", addPostToFavorite)
 
 //favorite posts page
 router.get("/favorite-posts", favoritePostsPage)
