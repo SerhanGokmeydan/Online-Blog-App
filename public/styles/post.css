@@ -1,28 +1,32 @@
 #post-container{
   display: grid;
-  grid-template-rows: auto inherit;
+  grid-template-rows: auto max-content;
   height: 100%;
 }
 
 #post{
   overflow-y: auto;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: max-content auto;
+  gap: 20px;
+}
+
+.content{
+  scrollbar-width: none;
 }
 
 #profile-link{
   display: flex;
   align-items: center;
-  text-decoration: none;
-  color: #1a1a1a;
-  margin-top: auto;
+  padding: 10px 0;
 }
 
 #profile-link img{
   width: 50px;
   height: 50px;
-  border-radius: 100%;
   margin-right: 10px;
+  border: 1px solid #4d4d4d;
+  border-radius: 5px;
 }
 
 #profile-link p{
@@ -30,25 +34,17 @@
 }
 
 #title{
-  display: flex;
-  position: relative;
-}
-
-#title h1{
-  margin-right: 20px;
-  margin-bottom: 20px;
+  display: grid;
+  grid-template-columns: max-content max-content;
+  gap: 15px;
+  align-items: center;
 }
 
 #title button{
-  background-color: transparent;
   border: none;
-  cursor: pointer;
 }
 
 #title button i{
   font-size: 24px;
-  color: #1a1a1a;
-  position: absolute;
-  top: 5px;
 }
 

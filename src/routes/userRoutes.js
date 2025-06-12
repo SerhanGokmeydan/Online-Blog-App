@@ -1,46 +1,44 @@
 import express from "express";
 import {
   editProfile,
-  editProfilePage,
-  followersPage,
-  followingsPage,
-  followProfile,
-  profilePage,
-  searchUser,
+  renderEditProfilePage,
+  renderFollowersPage,
+  renderFollowedPage,
+  followUser,
+  renderUserProfilePage,
+  searchUsers,
   uploadProfilPic,
 } from "../controllers/userController.js";
-import { ensureAuthenticated } from "../middlewares/authMiddleware.js";
 import upload from "../config/multer.js";
-// import { getUser } from "../middlewares/userMiddleware";
 
 const router = express.Router();
 
-//get profile page
-router.get("/profile/:id", profilePage);
+//get route to render user profile page
+router.get("/profile/:id", renderUserProfilePage);
 
-//get edit user profile page
-router.get("/edit-profile", editProfilePage);
+//get route to render edit user profile page
+router.get("/edit-profile", renderEditProfilePage);
 
-//edit user profile
+//post route to edit user profile
 router.post("/edit-profile", editProfile);
 
-//upload profil pic
+//post route to upload profil pic
 router.post(
   "/upload-profile-pic",
   upload.single("profilePic"),
   uploadProfilPic
 );
 
-//search user
-router.post("/search-user", searchUser);
+//post route to search user
+router.post("/search-user", searchUsers);
 
-//follow a profile
-router.post("/follow", followProfile);
+//post route to follow a profile
+router.post("/follow", followUser);
 
-//followers page
-router.get("/followers", followersPage);
+//get route to render followers page
+router.get("/followers/:id", renderFollowersPage);
 
-//followering page
-router.get("/followings", followingsPage);
+//get route to render followed page
+router.get("/followed/:id", renderFollowedPage);
 
 export default router;

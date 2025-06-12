@@ -1,0 +1,12 @@
+<%- include('partials/header.ejs') %>
+<form action="/<%= info == "edit" ? "edit-post/" + post.id : "create" %>" method="post" id="edit-create-form">
+  <input required class="border shadow-5 child-active" type="text" name="title" placeholder="title" id="" value="<%= info == "edit" ? post.title : "" %>">
+  <textarea required class="border shadow-10 parent-active" name="content" id="" placeholder="content"><%= info == "edit" ? post.content : "" %></textarea>
+  <div id="edit-create-btn-group">
+    <button class="border shadow-5 children-active hover"><%= info == "edit" ? "edit" : "create"%></button>
+    <% if (info == "edit") { %>
+      <a class="border shadow-5 children-active hover" href="/delete-post/<%= post.id %>">delete</a>
+    <% } %>
+  </div>
+</form>
+<%- include('partials/footer.ejs') %>

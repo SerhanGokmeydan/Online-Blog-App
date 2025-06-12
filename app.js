@@ -5,7 +5,6 @@
 //routes http istekleri için
 
 import express from "express";
-import bodyParser from "body-parser";
 import authRoutes from "./src/routes/authRoutes.js";
 import postRoutes from "./src/routes/postRoutes.js";
 import userRoutes from "./src/routes/userRoutes.js";
@@ -47,6 +46,10 @@ app.use((req, res, next) => {
 app.use("/", authRoutes);
 app.use("/", ensureAuthenticated, postRoutes);
 app.use("/", ensureAuthenticated, userRoutes);
+
+app.get("/search", (req, res) => {
+  res.render("search.ejs")
+})
 
 app.listen(3000, () => {
   console.log("app is running on port 3000");

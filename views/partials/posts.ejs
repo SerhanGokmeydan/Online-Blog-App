@@ -1,0 +1,22 @@
+  <% if (locals.posts) { %> <% for(let [index, post] of posts.entries()) { %>
+  <div class="post border shadow-10 parent-active">
+    <a href="/post/<%= post.id %>" class="post-link">
+      <% if (locals.userInfo) { %>
+      <div class="profile-info">
+        <img
+          src="<%= userInfo[index].profile_pic_path %>"
+          alt="profile picture"
+          id="profile-pic"
+        />
+        <p><%= userInfo[index].username %></p>
+      </div>
+      <% } %>
+      <h2><%= post.title %></h2>
+      <p class="content"><%= post.content %></p>
+    </a>
+    <% if (locals.user && userId == user.id) { %>
+    <a href="/edit-post/<%= post.id %>" id="edit-btn"><i class="fa-solid fa-pen-to-square"></i></a>
+    <% } %>
+  </div>
+  <% } %> <% } %>
+

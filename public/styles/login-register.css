@@ -1,18 +1,10 @@
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: sans-serif;
-  color: #4d4d4d;
   font-size: 18px;
 }
 
 body {
-  min-height: 100vh;
-  display: flex;
+  align-content: center;
   justify-content: center;
-  align-items: center;
-  background-color: #f5f5f5;
 }
 
 .form-container {
@@ -21,58 +13,38 @@ body {
   gap: 10px;
   width: 700px;
   height: 300px;
-  box-shadow: 10px 10px 0 #4d4d4d;
-  border-radius: 10px;
-  border: 2px solid #4d4d4d;
 }
 
-#login-form,
-#register-form {
+.login-register-form{
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: 1fr 1fr 1fr 1fr;
   gap: 20px;
 }
 
-.login-input,
-.register-input {
-  border-radius: 10px;
-  outline: none;
-  border: none;
+.login-register-input{
   padding: 0 10px;
-  border: 1px solid #4d4d4d;
-  box-shadow: inset 3px 3px 0 #4d4d4d;
-  background-color: #f5f5f5;
 }
 
-.login-btn-group,
-.register-btn-group {
+.login-register-btn-group{
   display: grid;
   grid-template-columns: auto auto;
   gap: 20px;
 }
 
-.login-btn-group *,
-.register-btn-group * {
-  border-radius: 10px;
-  border: none;
-  background-color: #f5f5f5;
-  border: 1px solid #4d4d4d;
-  box-shadow: 5px 5px 0 #4d4d4d;
+.login-register-btn-group *{
   cursor: pointer;
 }
 
-#register-link,
-#login-link {
+.login-register-link{
   align-content: center;
 }
 
-#register-link a,
-#login-link a {
-  color: #1a1a1a;
+.login-register-link a{
+  text-decoration: underline;
 }
 
-#google-btn {
+.google-btn {
   text-align: center;
   text-decoration: none;
   align-content: center;

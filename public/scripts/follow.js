@@ -1,11 +1,16 @@
 const baseUrl = "http://localhost:3000";
+const followBtn = document.querySelector("#follow-btn");
 
 const follow = async (e) => {
+  const followBtnTextContent = followBtn.textContent;
+  followBtn.textContent =
+    followBtnTextContent == "follow" ? "unfollow" : "follow";
+
   e.preventDefault();
 
   // Sadece post id'yi al
   const match = window.location.pathname.match(/\/profile\/(\d+)$/);
-  const profileId = match ? match[1] : null;
+  const followedId = match ? match[1] : null;
 
   const res = await fetch(baseUrl + "/follow", {
     method: "post",
@@ -13,15 +18,11 @@ const follow = async (e) => {
       "content-type": "application/json",
     },
     body: JSON.stringify({
-      profileId: Number(profileId),
+      followedId: Number(followedId),
     }),
   });
-  
-  const data = await res.json()
-  console.log(data)
 };
 
-const followButton = document.querySelector("#follow-btn");
-if (followButton) {
-  followButton.addEventListener("click", follow);
+if (followBtn) {
+  followBtn.addEventListener("click", follow);
 }

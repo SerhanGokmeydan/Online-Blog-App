@@ -1,8 +1,7 @@
-import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import GoogleStrategy from "passport-google-oauth20";
 import dotenv from "dotenv";
-import { findUserByUserId } from "../models/authModel.js";
+import { findUserInDbByUserId } from "../models/userModel.js";
 import { loginWithGoogle, loginWithUsernmaneAndPassword } from "../controllers/authController.js";
 
 dotenv.config();
@@ -14,7 +13,7 @@ const configurePassport = (passport) => {
 
   passport.deserializeUser(async (id, done) => {
     try {
-      const user = await findUserByUserId(id); // id ile bul
+      const user = await findUserInDbByUserId(id); // id ile bul
       done(null, user);
     } catch (err) {
       done(err);

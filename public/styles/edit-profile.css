@@ -1,0 +1,20 @@
+#upload-form{
+  display: none;
+}
+
+#edit-profile-form{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 30px;
+}
+
+#edit-profile-form input{
+  padding: 10px;
+  font-size: 18px;
+}
+
+#edit-profile-form button{
+  padding: 5px 10px;
+  font-size: 18px;
+}

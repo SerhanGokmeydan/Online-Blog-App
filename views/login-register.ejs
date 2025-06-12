@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles/main.css" />
+    <link rel="stylesheet" href="styles/login-register.css" />
+    <title><%= info == "login" ? "login" : "registration" %></title>
+  </head>
+  <body>
+    <div class="form-container border shadow-10 parent-active">
+      <form action="/<%= info == "login" ? "login" : "register" %>" method="post" class="login-register-form">
+        <input
+          type="text"
+          name="username"
+          class="login-register-input border shadow-5 child-active"
+          placeholder="Username"
+          required
+        />
+        <input
+          type="password"
+          name="password"
+          class="login-register-input border shadow-5 child-active"
+          placeholder="Password"
+          required
+        />
+        <p class="login-register-link">
+          <% if (info == "login") { %>
+            No account?
+            <a href="/register">Register</a>
+          <% } else {%>
+            Do you have one? 
+            <a href="/login">Login</a>
+            <% } %>
+        </p>
+        <div class="login-register-btn-group">
+          <button class="border shadow-5 child-active hover"><%= info == "login" ? "Login" : "Register" %></button>
+          <a class="google-btn border shadow-5 child-active hover" href="/auth/google">Google</a>
+        </div>
+      </form>
+      
+    </div>
+  </body>
+</html>

@@ -1,50 +1,44 @@
-<%- include('partials/header.ejs') %> 
-  <div id="profile-header">
-    <% if (locals.user.profile_img) { %>
-    <img
-      src="<%= user.profile_img %>"
-      alt="profile photo"
-      width="150"
-      height="150"
-    />
-    <% } else {%>
-    <img src="/assets/user.png" alt="profile photo" width="150" height="150" />
-    <% } %>
+<%- include('partials/header.ejs') %>
+<div id="profile">
+  <% if (locals.user.profile_pic_path) { %>
+  <img
+    src="<%= user.profile_pic_path %>"
+    alt="profile photo"
+    width="150"
+    height="150"
+    class="border shadow-5 child-active"
+  />
+  <% } else {%>
+  <img src="/assets/user.png" alt="profile photo" width="150" height="150" />
+  <% } %>
+  <div>
     <div id="username-date">
-      <h1><%= user.username %></h1>
-      <h3><%= String(user.date).slice(0,15) %></h3>
+      <h1><%= user.username %> |</h1>
+      <h3>| <%= String(user.date).slice(0,15) %></h3>
     </div>
+    <% if (userId == user.id) { %>
+      <a href="/edit-profile" id="edit-profile" class="border shadow-5 child-active">edit profile</a>
+    <% } %>
   </div>
-<% if (userId == user.id) { %>
-<a href="/edit-profile">Edit Profile</a>
-<p>posts</p>
-<p>
-  <a href="/followers">followers</a>
-  <a href="/followings">followings</a>
-</p>
-<% } %> <% if (userId !== user.id) { %>
-<form action="">
-  <button id="follow-btn">follow</button>
-</form>
-<% } %>
-<div>
-  <% for(let post of user.posts) { %>
-    <div class="post">
-    <a href="/post/<%= post.id %>">
-        <h2>
-          <%= post.title %>
-        </h2>
-        <p class="content"><%= post.content %></p>
-      </a>
-      <% if (userId == user.id) { %>
-      <a href="/edit-post/<%= post.id %>">edit</a>
-      <% } %>
-    </div>
+    <% if (userId !== user.id) { %>
+  <form action="">
+    <button class="border shadow-5 child-active hover" id="follow-btn"><%= isFollowed ? "unfollow" : "follow" %></button>
+  </form>
   <% } %>
 </div>
+<div id="stats">
+  <div id="post-count">
+    <% if (userId == user.id) { %>
+    <a href="/create"><i class="fa-solid fa-square-plus"></i></a>
+    <% } %>
+    <p>posts: <%= posts.length %></p>
+  </div>
+  <p>
+    <a href="/followers/<%= user.id %>">followers: <%= followerCount.length %></a>
+    <a href="/followed/<%= user.id %>">following: <%= followedCount.length %></a>
+  </p>
+</div>
+<%- include('partials/posts.ejs') %>
 
-<% if (userId == user.id) { %>
-<a href="/create">create</a>
-<% } %>
 <script src="/scripts/follow.js"></script>
 <%- include('partials/footer.ejs') %>

@@ -1,0 +1,32 @@
+#edit-create-form{
+  display: grid;
+  grid-template-rows: max-content auto max-content;
+  gap: 30px;
+  height: calc(100% - 5px);
+}
+
+#edit-create-form input{
+  padding: 10px;
+  width: calc(100% - 5px);
+}
+
+#edit-create-form textarea{
+  padding: 10px;
+  width: calc(100% - 10px);
+  scrollbar-width: none;
+  resize: none;
+}
+
+#edit-create-btn-group{
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  width: calc(100% - 5px);
+}
+
+#edit-create-btn-group *{
+  width: 100%;
+  text-align: center;
+  padding: 10px;
+  font-size: 18px;
+}

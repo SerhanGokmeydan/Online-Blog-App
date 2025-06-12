@@ -1,51 +1,47 @@
 import express from "express";
 import {
-  createPost,
+  createNewPost,
   editPost,
-  editPostPage,
-  getCreatePostPage,
-  allPostsPage,
-  redirectPostsPage,
-  postPage,
+  renderEditPostPage,
+  renderCreatePostPage,
+  renderHomePage,
+  redirectToHomePage,
+  renderPostPage,
   deletePost,  
-  searchPost,
-  searchPage,
+  searchPosts,
   addPostToFavorite,
-  favoritePostsPage,
+  renderFavoritesPage,
 } from "../controllers/postController.js";
 import { getPost } from "../middlewares/postMiddleware.js";
 
 const router = express.Router();
 
 //all posts
-router.get("/", redirectPostsPage);
-router.get("/posts", allPostsPage);
+router.get("/", redirectToHomePage);
+router.get("/home", renderHomePage);
 
 //a post
-router.get("/post/:id", getPost, postPage);
+router.get("/post/:id", getPost, renderPostPage);
 
 //create post
-router.get("/create", getCreatePostPage);
-router.post("/create", createPost);
+router.get("/create", renderCreatePostPage);
+router.post("/create", createNewPost);
 
 //edit post
 
-router.get("/edit-post/:id", getPost, editPostPage);
+router.get("/edit-post/:id", getPost, renderEditPostPage);
 router.post("/edit-post/:id", editPost);
 
 //delete post
-router.post("/delete-post/:id", deletePost)
-
-//search post page
-router.get("/search", searchPage)
+router.get("/delete-post/:id", deletePost)
 
 //search post
-router.post("/search-post", searchPost)
+router.post("/search-post", searchPosts)
 
 //add a post to favorites
-router.post("/favorite/:id", addPostToFavorite)
+router.post("/favorite/", addPostToFavorite)
 
 //favorite posts page
-router.get("/favorite-posts", favoritePostsPage)
+router.get("/favorites", renderFavoritesPage)
 
 export default router;

@@ -1,18 +1,32 @@
 import db from "../config/db.js";
 
-//fetch all users
-export const fetchAllUsers = async () => {
+//this func gets all the users from database
+export const getAllUsersFromDb = async () => {
   try {
     const result = await db.query("select * from users");
     const users = result.rows;
     return users;
   } catch (err) {
-    console.log("user model", err);
+    console.log("user model / get all users from database:", err);
   }
 };
 
-//fetch user info
-export const fetchUserInfoById = async (userId) => {
+//this func finds the users in database by theirs username
+export const findUserInDbByUsername = async (username) => {
+  try {
+    const result = await db.query(
+      "select * from users where username like $1",
+      [username]
+    );
+    const user = result.rows[0];
+    return user;
+  } catch (err) {
+    console.log("user model / find user via username:" + err);
+  }
+};
+
+//this func finds the users ind database by theirs user id
+export const findUserInDbByUserId = async (userId) => {
   try {
     const result = await db.query("select * from users where id = $1", [
       userId,
@@ -20,123 +34,110 @@ export const fetchUserInfoById = async (userId) => {
     const user = result.rows[0];
     return user;
   } catch (err) {
-    console.log("user model", err);
+    console.log("user model / find user via user id:" + err);
   }
 };
 
-//fetch posts by user
-export const fetchPostsByUser = async (userId) => {
-  try {
-    const result = await db.query(
-      "select * from users inner join posts on users.id = posts.user_id where users.id = $1",
-      [userId]
-    );
-    const posts = result.rows;
-    return posts;
-  } catch (err) {
-    console.log("user model:", err);
-  }
-};
-
-export const editProfileFromDb = async (userId, username) => {
+//this func edits a profile that is in database
+export const editUserInDb = async (userId, username) => {
   try {
     await db.query("update users set username = $1 where id = $2", [
       username,
       userId,
     ]);
   } catch (err) {
-    console.log("post model", err);
+    console.log("user model / edit user in database:", err);
   }
 };
 
-//upload profil pic
-export const uploadProfilPicToDb = async (imgPath, userId) => {
+//this func uploads profile pic's path to database
+export const uploadProfilPicToDb = async (picPath, userId) => {
   try {
-    await db.query("update users set profile_img = $1 where id = $2", [
-      imgPath,
+    await db.query("update users set profile_pic_path = $1 where id = $2", [
+      picPath,
       userId,
     ]);
   } catch (err) {
-    console.log("user model", err);
+    console.log("user model / upload profile picture to database:", err);
   }
 };
 
-
-//search user from db
-export const searchUserFromDb = async (username) => {
-  try{
-    const result = await db.query("select * from users where username like $1 limit 10", [`%${username}%`])
+//this func searchsfirst 10 users via username in database
+export const searchUsersInDb = async (username) => {
+  try {
+    const result = await db.query(
+      "select * from users where username like '%' || $1 || '%' limit 10",
+      [username]
+    );
     const users = result.rows;
-    return users
-  }catch(err){
-    console.log("user model", err)
-  }
-}
-
-//
-//
-//follow a profile
-export const addFollowingUserToDb = async (userId, profileId) => {
-  try {
-    const result = await db.query(
-      "insert into user_followers (user_id, follower_id) values ($1, $2)",
-      [userId, profileId]
-    );
-    return result.rows[0];
+    return users;
   } catch (err) {
-    console.log("user model", err);
+    console.log("user model / search users in database:", err);
   }
 };
 
-//get followers page
-export const getFollowersByUser = async (userId) => {
+//this func adds a user that you follow to database
+export const addFollowedUserToDb = async (userId, followedId) => {
   try {
     const result = await db.query(
-      "select users.* from user_followers join users on users.id = user_followers.user_id where user_followers.follower_id = $1",
+      "insert into user_followed (user_id, followed_id) values ($1, $2)",
+      [userId, followedId]
+    );
+    return result.rows[0];
+  } catch (err) {
+    console.log("user model / add followed user to database:", err);
+  }
+};
+
+//this func gets all followers from database by user
+export const getFollowersByUserFromDb = async (userId) => {
+  try {
+    const result = await db.query(
+      "select users.* from user_followed join users on users.id = user_followed.user_id where user_followed.followed_id = $1",
       [userId]
     );
     const followers = result.rows;
     return followers;
   } catch (err) {
-    console.log("user model", err);
+    console.log("user model / get followers by user from database:", err);
   }
 };
 
-//get followings page
-export const getFollowingsByUser = async (userId) => {
+//this func gets all followed from database by user
+export const getFollowedByUserFromDb = async (userId) => {
   try {
     const result = await db.query(
-      "select users.* from user_followers join users on users.id = user_followers.follower_id where user_followers.user_id = $1",
+      "select users.* from user_followed join users on users.id = user_followed.followed_id where user_followed.user_id = $1",
       [userId]
     );
-    const followers = result.rows;
-    return followers;
+    const followed = result.rows;
+    return followed;
   } catch (err) {
-    console.log("user model", err);
+    console.log("user model / get followed by user from database:", err);
   }
 };
 
-//search profile in followers
-export const searchUserInFollowers = async (userId, profileId) => {
+//this func finds followed in database
+export const findFollowedInDb = async (userId, followedId) => {
   try {
     const result = await db.query(
-      "select * from user_followers where user_id = $1 and follower_id = $2",
-      [userId, profileId]
+      "select * from user_followed where user_id = $1 and followed_id = $2",
+      [userId, followedId]
     );
     return result.rows[0];
   } catch (err) {
-    console.log("user model", err);
+    console.log("user model / search followed in database:", err);
   }
 };
 
-// unfollow a profile
-export const unfollowUserFromFollowers = async (userId, profileId) => {
+//this func remove a follower from databse
+export const deleteFollowedFromDb = async (userId, followedId) => {
   try {
     await db.query(
-      "delete from user_followers where user_id = $1 and follower_id = $2",
-      [userId, profileId]
+      "delete from user_followed where user_id = $1 and followed_id = $2",
+      [userId, followedId]
     );
   } catch (err) {
-    console.log("user model", err);
+    console.log("user model / delete followed from database", err);
   }
 };

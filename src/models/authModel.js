@@ -1,45 +1,27 @@
 import db from "../config/db.js";
 
-//registration db
-export const registerUser = async (username, password, date) => {
+//this func saves user registration to database
+export const saveUserRegistrationToDb = async (username, password) => {
   try {
-    await db.query(
-      "insert into users (username, password, date) values ($1, $2, $3)",
-      [username, password, date]
+    await db.query("insert into users (username, password) values ($1, $2)", [
+      username,
+      password,
+    ]);
+  } catch (err) {
+    console.log("auth model / save user registration to database:" + err);
+  }
+};
+
+//this func saves user login that is via google to database
+export const saveGoogleLoginToDb = async (username) => {
+  try {
+    const result = await db.query(
+      "insert into users (username, password) values ($1, $2) returning *",
+      [username, "google"]
     );
-  } catch (err) {
-    console.log("authModel:" + err);
-  }
-};
-
-//passport db
-export const findUserByUsername = async (username) => {
-  try {
-    const result = await db.query("select * from users where username = $1", [username]);
     const user = result.rows[0];
     return user;
   } catch (err) {
-    console.log("authModel:" + err);
+    console.log("auth model / save google login to database:", err);
   }
 };
-
-export const findUserByUserId = async (userId) => {
-  try {
-    const result = await db.query("select * from users where id = $1", [userId]);
-    const user = result.rows[0];
-    return user;
-  } catch (err) {
-    console.log("authModel:" + err);
-  }
-};
-
-export const googleLogin = async (username, date) => {
-  try{
-    const result = await db.query("insert into users (username, password, date) values ($1, $2, $3) returning *", [username, "google", date]);
-    const user = result.rows[0]
-    return user;
-  }catch(err){
-    console.log("authModel", err)
-  }
-
-}

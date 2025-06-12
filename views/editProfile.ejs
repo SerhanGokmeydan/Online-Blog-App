@@ -1,16 +1,41 @@
-<%- include('partials/header.ejs') %> 
-<% if (locals.profilePic) { %>
-<img src="<%= profilePic %>" alt="profile photo" width="150" height="150"/>
+<%- include('partials/header.ejs') %> <% if (locals.picPath) { %>
+<img
+  class="border shadow-5 child-active"
+  src="<%= picPath %>"
+  alt="profile photo"
+  width="150"
+  height="150"
+  id="profile-pic"
+/>
 <% } else {%>
-<img src="/assets/user.png" alt="profile photo" width="150" height="150"/>
+<img
+  class="border shadow-5 child-active"
+  src="/assets/user.png"
+  alt="profile photo"
+  width="150"
+  height="150"
+  id="profile-pic"
+/>
 <% } %>
-<form action="/upload-profile-pic" method="post" enctype="multipart/form-data">
-  <input type="file" name="profilePic" accept="image/*" required />
+<form
+  id="upload-form"
+  action="/upload-profile-pic"
+  method="post"
+  enctype="multipart/form-data"
+>
+  <input
+    id="file-inp"
+    type="file"
+    name="profilePic"
+    accept="image/*"
+    required
+  />
   <button>Upload</button>
 </form>
-<form action="/edit-profile" method="post">
-  <input type="text" name="username" id="" value="<%= username %>" required />
-  <button>Edit Profile</button>
+<form id="edit-profile-form" action="/edit-profile" method="post">
+  <input class="border shadow-5 child-active" type="text" name="username" id="" value="<%= username %>" required />
+  <button class="border shadow-5 child-active hover">Edit</button>
 </form>
 
+<script src="scripts/profile-pic.js"></script>
 <%- include('partials/footer.ejs') %>

@@ -1,24 +1,24 @@
 import express from "express";
 import {
-  getLoginPage,
-  getRegisterScreen,
+  renderLoginPage,
+  renderRegistrationPage,
   registerWithUsernameAndPassword,
-  logoutFunction,
+  logout,
 } from "../controllers/authController.js";
 import passport from "passport";
 
 const router = express.Router();
 
 //registration routes
-router.get("/register", getRegisterScreen);
+router.get("/register", renderRegistrationPage);
 router.post("/register", registerWithUsernameAndPassword);
 
 //login routes
-router.get("/login", getLoginPage);
+router.get("/login", renderLoginPage);
 router.post(
   "/login",
   passport.authenticate("local", {
-    successRedirect: "/posts",
+    successRedirect: "/home",
     failureRedirect: "/login",
   })
 );
@@ -29,13 +29,13 @@ router.get("/auth/google", passport.authenticate("google",{
 
 router.get("/auth/google/callback",
   passport.authenticate("google", {
-    successRedirect: "/posts",
+    successRedirect: "/home",
     failureRedirect: "/login"
   })
 );
 
 
 //logout routes
-router.get("/logout", logoutFunction);
+router.get("/logout", logout);
 
 export default router;

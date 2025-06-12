@@ -12,22 +12,23 @@
     />
     <link rel="stylesheet" href="/styles/main.css" />
     <link rel="stylesheet" href="/styles/nav.css" />
+    <link rel="stylesheet" href="/styles/posts.css" />
     <link rel="stylesheet" href="/styles/search.css" />
-    <link rel="stylesheet" href="/styles/home.css" />
     <link rel="stylesheet" href="/styles/post.css" />
-    <link rel="stylesheet" href="/styles/favorite-posts.css" />
     <link rel="stylesheet" href="/styles/profile.css" />
+    <link rel="stylesheet" href="/styles/edit-create.css" />
+    <link rel="stylesheet" href="/styles/edit-profile.css" />
     <title>Document</title>
   </head>
   <body>
     <header>
-      <nav>
+      <nav class="border shadow-10 parent-active">
         <p><i class="fa-brands fa-wordpress"></i></p>
-        <a href="/"><i class="fa-solid fa-house"></i></a>
-        <a href="/profile/<%= userId %>"><i class="fa-solid fa-user"></i></a>
-        <a href="/search"><i class="fa-solid fa-magnifying-glass"></i></a>
-        <a href="/favorite-posts"><i class="fa-solid fa-star"></i></a>
-        <a href="/logout"><i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+        <a class="hover border shadow-5 child-active" href="/"><i class="fa-solid fa-house "></i></a>
+        <a class="hover border shadow-5 child-active" href="/profile/<%= userId %>"><i class="fa-solid fa-user "></i></a>
+        <a class="hover border shadow-5 child-active" href="/search"><i class="fa-solid fa-magnifying-glass "></i></a>
+        <a class="hover border shadow-5 child-active" href="/favorites"><i class="fa-solid fa-star "></i></a>
+        <a class="hover border shadow-5 child-active" href="/logout"><i class="fa-solid fa-arrow-right-from-bracket "></i></a>
       </nav>
     </header>
     <main>

@@ -13,6 +13,7 @@ async function search(e) {
   clearTimeout(timer);
   timer = setTimeout(async () => {
     e.preventDefault();
+    
     // Post arama
     const postRes = await fetch(baseUrl + `/search-post`, {
       method: "post",
@@ -25,6 +26,7 @@ async function search(e) {
     });
     const postData = await postRes.json();
     const posts = postData.posts;
+    const postsUser = postData.users;
 
     // User arama
     const userRes = await fetch(baseUrl + `/search-user`, {
@@ -38,13 +40,27 @@ async function search(e) {
     });
     const userData = await userRes.json();
     const users = userData.users;
-
+    
     if (searchbox.value !== "") {
       searchedPosts.innerHTML = `
         <h3>Posts</h3>
         ${posts
-          .map((post) => {
-            return `<a href="/post/${post.id}">${post.title}</a></br>`;
+          .map((post, index) => {
+            return `<div class="post border shadow-10 parent-active">
+                      <a href="/post/${post.id}">
+                        <div class="profile-info">
+                          <img
+                            src="${postsUser[index].profile_pic_path}"
+                            alt="profile picture"
+                            id="profile-pic"
+                          />
+                          <p>${postsUser[index].username}</p>
+                        </div>
+
+                        <h2>${post.title}</h2>
+                        <p class="content">${post.content}</p>
+                      </a>
+                    </div>`;
           })
           .join("")}
       `;
@@ -52,7 +68,18 @@ async function search(e) {
         <h3>Users</h3>
         ${users
           .map((user) => {
-            return `<a href="/profile/${user.id}">${user.username}</a></br>`;
+            return `<div class="post border shadow-10 parent-active">
+                      <a href="/profile/${user.id}">
+                        <div class="profile-info">
+                          <img
+                            src="${user.profile_pic_path || "assets/user.png"}"
+                            alt="profile picture"
+                            id="profile-pic"
+                          />
+                          <p>${user.username}</p>
+                        </div>
+                      </a>
+                    </div>`;
           })
           .join("")}
       `;

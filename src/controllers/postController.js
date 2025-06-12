@@ -1,97 +1,100 @@
 import {
-  editPostFromDb,
-  fetchAllPosts,
-  pushPostToDb,
+  editPostInDb,
+  getAllPostsFromDb,
+  addPostToDb,
   deletePostFromDb,
-  searchPostFromDb,
+  searchPostsInDb,
   addFavoritePostToDb,
-  fetchPostById,
-  getFavoritePostsByUser,
-  searchPostInFavorites,
-  removePostFromFavorites,
+  getFavoritesFromDbByUser,
+  findFavoriteInDb,
+  deleteFavoriteFromDb,
 } from "../models/postModel.js";
-import { fetchUserInfoById } from "../models/userModel.js";
+import { findUserInDbByUserId } from "../models/userModel.js";
 
-//redirect posts
-export const redirectPostsPage = (req, res) => {
-  res.redirect("/posts");
+//this func redirects the path to the home
+export const redirectToHomePage = (req, res) => {
+  try {
+    res.redirect("/home");
+  } catch (err) {
+    console.log("post controller / redirect to home page:", err);
+  }
 };
 
-// get all posts
-export const allPostsPage = async (req, res) => {
+// this func renders home page
+export const renderHomePage = async (req, res) => {
   try {
-    const posts = await fetchAllPosts();
+    const posts = await getAllPostsFromDb();
     const userInfo = await Promise.all(
       posts.map(async (post) => {
-        return await fetchUserInfoById(post.user_id);
+        return await findUserInDbByUserId(post.user_id);
       })
     );
 
-    res.render("allPosts.ejs", { allPosts: posts, userInfo: userInfo });
+    res.render("home.ejs", { posts, userInfo });
   } catch (err) {
-    console.log(err);
+    console.log("post controller / render home page", err);
   }
 };
 
-//get a post
-export const postPage = async (req, res) => {
+//this func renders post page
+export const renderPostPage = async (req, res) => {
   try {
     const userId = req.user.id;
     const post = req.post;
-    const userInfo = await fetchUserInfoById(post.user_id);
-    const isFavorite = await searchPostInFavorites(userId, post.id);
-    let valid;
-
-    if (isFavorite) {
-      valid = true;
-    } else {
-      valid = false;
-    }
+    const userInfo = await findUserInDbByUserId(post.user_id);
+    const isFavorite = await findFavoriteInDb(userId, post.id);
 
     res.render("post.ejs", {
-      post: post,
-      userInfo: userInfo,
-      isFavorite: valid,
+      post,
+      userInfo,
+      isFavorite,
     });
   } catch (err) {
-    console.log("post controller", err);
+    console.log("post controller / render post page", err);
   }
 };
 
-//create post page
-export const getCreatePostPage = (req, res) => {
-  res.render("createPost.ejs");
+//this func render create post page
+export const renderCreatePostPage = (req, res) => {
+  try {
+    res.render("edit-create-post.ejs", { info: "create" });
+  } catch (err) {
+    console.log("post controller / render create post page:", err);
+  }
 };
 
-//create post
-export const createPost = async (req, res) => {
+//this func creates new post
+export const createNewPost = async (req, res) => {
   try {
     const newPost = {
       userId: req.user.id,
       title: req.body.title,
       content: req.body.content,
       author: req.user.username,
-      date: new Date().toISOString(),
-      like: 0,
     };
 
     if (newPost.title && newPost.content) {
-      await pushPostToDb(newPost);
+      await addPostToDb(newPost);
     }
     res.redirect("/profile/" + req.user.id);
   } catch (err) {
-    console.log("postController", err);
+    console.log("post controller / create new post", err);
   }
 };
 
-//edit post page
-export const editPostPage = (req, res) => {
-  res.render("editPost.ejs", {
-    post: req.post,
-  });
+//this func renders edit post page
+export const renderEditPostPage = (req, res) => {
+  try {
+    res.render("edit-create-post.ejs", {
+      info: "edit",
+      post: req.post,
+    });
+  } catch (err) {
+    console.log("post controller / render edit post page:", err);
+  }
 };
 
-//edit post
+//this func edits a post
 export const editPost = async (req, res) => {
   try {
     const updatedPost = {
@@ -100,71 +103,75 @@ export const editPost = async (req, res) => {
       content: req.body.content,
     };
 
-    await editPostFromDb(updatedPost);
+    await editPostInDb(updatedPost);
     res.redirect("/profile/" + req.user.id);
   } catch (err) {
-    console.log(err);
+    console.log("post controller / edit post:", err);
   }
 };
 
-//delete post
+//this func deletes a post
 export const deletePost = async (req, res) => {
   try {
-    const id = req.params.id;
-    await deletePostFromDb(id);
-    res.redirect("/profile/" + req.user.id);
+    const userId = req.user.id;
+    const postId = req.params.id;
+    await deletePostFromDb(postId);
+
+    res.redirect("/profile/" + userId);
   } catch (err) {
-    console.log("post controller", err);
+    console.log("post controller / delete post", err);
   }
 };
 
-//search post page
-export const searchPage = (req, res) => {
-  res.render("search.ejs");
-};
-
-//search post
-export const searchPost = async (req, res) => {
+//this func searches among posts
+export const searchPosts = async (req, res) => {
   try {
-    const { title } = req.body;
-    const posts = await searchPostFromDb(title);
-    res.status(200).json({ posts });
+    const title = req.body.title;
+    const posts = await searchPostsInDb(title);
+    const users = await Promise.all(
+      posts.map(async (post) => {
+        return await findUserInDbByUserId(post.user_id);
+      })
+    );
+
+    res.status(200).json({ posts, users });
   } catch (err) {
-    console.log(err);
+    console.log("post controller / search posts:", err);
   }
 };
 
-//add a post to favorites
+//this func adds a post to favorite
 export const addPostToFavorite = async (req, res) => {
   try {
-    const postId = req.params.id
+    const postId = req.body.postId;
     const userId = req.user.id;
-    const isFavorite = await searchPostInFavorites(userId, postId);
+    const isFavorite = await findFavoriteInDb(userId, postId);
 
     if (isFavorite) {
-      await removePostFromFavorites(userId, postId);
+      await deleteFavoriteFromDb(userId, postId);
     } else {
       await addFavoritePostToDb(userId, postId);
     }
 
-    res.redirect("/post/" + postId)
+    res.status(200);
   } catch (err) {
-    console.log("post controller", err);
+    console.log("post controller / add post to favorite", err);
   }
 };
 
-//favorites page
-export const favoritePostsPage = async (req, res) => {
+//this func renders favorites page
+export const renderFavoritesPage = async (req, res) => {
   try {
     const userId = req.user.id;
-    const favoritePosts = await getFavoritePostsByUser(userId);
+    const favorites = await getFavoritesFromDbByUser(userId);
     const userInfo = await Promise.all(
-      favoritePosts.map(async (post) => {
-        return await fetchUserInfoById(post.user_id);
+      favorites.map(async (post) => {
+        return await findUserInDbByUserId(post.user_id);
       })
-    ); 
-    res.render("favoritePosts.ejs", { favoritePosts, userInfo });
+    );
+
+    res.render("home.ejs", { posts: favorites, userInfo });
   } catch (err) {
-    console.log("post controller", err);
+    console.log("post controller / render favorites page:", err);
   }
 };
