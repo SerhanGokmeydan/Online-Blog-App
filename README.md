@@ -31,7 +31,7 @@ An online blog app that users can write blog and follow others
 ## Installation & Running
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/hangman-game.git
+git clone https://github.com/SerhanGokmeydan/Online-Blog-App.git
 ```
 2. Install dependencies
 ```bash
